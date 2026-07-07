@@ -14,40 +14,76 @@
 
         body {
             height: 100vh;
-            background-color: #050505; /* Deep black for TV contrast */
+            background-color: #050505; 
+            background-image: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
             color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Prevents any scrolling on the TV */
+            overflow: hidden; 
         }
 
-        /* Huge, Glowing Title */
+        /* --- THE FLOATING ALEX.PNG --- */
+        .floating-avatar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 15vw; /* Scales beautifully on any TV */
+            max-width: 250px;
+            z-index: 0; /* Sits behind the UI */
+            pointer-events: none; /* CRITICAL: Allows clicks to pass through to buttons */
+            opacity: 0.12; /* Subtle enough not to distract from the game */
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+            animation: floatAround 25s infinite ease-in-out alternate;
+        }
+
+        @keyframes floatAround {
+            0% { transform: translate(5vw, 10vh) rotate(-5deg) scale(1); }
+            25% { transform: translate(75vw, 15vh) rotate(5deg) scale(1.05); }
+            50% { transform: translate(80vw, 65vh) rotate(-2deg) scale(0.95); }
+            75% { transform: translate(10vw, 75vh) rotate(8deg) scale(1.02); }
+            100% { transform: translate(5vw, 10vh) rotate(-5deg) scale(1); }
+        }
+
+        /* --- HEADER & TITLE ANIMATIONS --- */
         header {
             text-align: center;
             padding: 1.5vh 0;
             flex-shrink: 0;
-            background: linear-gradient(180deg, #111 0%, #050505 100%);
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
-            font-size: 4.5vw; /* Scales perfectly to any TV size */
+            font-size: 4.5vw; 
             margin: 0;
             font-weight: 900;
-            background: linear-gradient(90deg, #ffd700, #ff8c00, #ffd700);
+            background: linear-gradient(90deg, #ffd700, #ff8c00, #ffd700, #ff8c00);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            animation: shimmer 4s linear infinite, textGlow 3s ease-in-out infinite alternate;
             letter-spacing: 2px;
         }
 
-        /* Main Player Area */
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        @keyframes textGlow {
+            from { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)); }
+            to { filter: drop-shadow(0 0 25px rgba(255, 140, 0, 0.6)); }
+        }
+
+        /* --- MAIN PLAYER AREA --- */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
             padding: 0 2vw;
-            min-height: 0; /* Crucial for flexbox to calculate heights correctly */
+            min-height: 0; 
+            position: relative;
+            z-index: 1;
         }
 
         .player-container {
@@ -56,9 +92,14 @@
             background: #000;
             border-radius: 1vw;
             overflow: hidden;
-            box-shadow: 0 0 40px rgba(0,0,0,0.9);
             margin-bottom: 1.5vh;
             border: 2px solid #1f2937;
+            animation: borderPulse 5s infinite ease-in-out;
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(37, 99, 235, 0.15); border-color: #1f2937; }
+            50% { box-shadow: 0 0 50px rgba(37, 99, 235, 0.35); border-color: #334155; }
         }
 
         iframe {
@@ -68,7 +109,7 @@
             display: block;
         }
 
-        /* Large, Easy-to-Click Source Buttons */
+        /* --- BUTTONS & ENTRANCE ANIMATIONS --- */
         .controls {
             display: flex;
             flex-wrap: wrap;
@@ -79,38 +120,60 @@
         }
 
         button {
-            font-size: 1.6vw; /* Large text for reading from the couch */
-            padding: 1.5vh 3vw;
-            background: #1e293b;
+            font-size: 1.5vw; 
+            padding: 1.5vh 2.5vw;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(5px);
             color: #e2e8f0;
             border: 2px solid #334155;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-weight: bold;
             letter-spacing: 1px;
+            opacity: 0;
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        /* Staggered entrance animation for buttons */
+        button:nth-child(1) { animation-delay: 0.1s; }
+        button:nth-child(2) { animation-delay: 0.15s; }
+        button:nth-child(3) { animation-delay: 0.2s; }
+        button:nth-child(4) { animation-delay: 0.25s; }
+        button:nth-child(5) { animation-delay: 0.3s; }
+        button:nth-child(6) { animation-delay: 0.35s; }
+        button:nth-child(7) { animation-delay: 0.4s; }
+        button:nth-child(8) { animation-delay: 0.45s; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         button:hover {
-            background: #2563eb;
+            background: rgba(37, 99, 235, 0.9);
             border-color: #60a5fa;
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
         }
 
         button.active {
-            background: #1d4ed8;
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
             border-color: #93c5fd;
             box-shadow: 0 0 25px rgba(37, 99, 235, 0.6);
+            transform: translateY(-2px);
         }
 
-        /* Backup Link Footer */
+        /* --- FOOTER --- */
         footer {
             text-align: center;
             padding: 1.2vh;
-            background: #111;
+            background: rgba(17, 17, 17, 0.9);
+            backdrop-filter: blur(5px);
             flex-shrink: 0;
             border-top: 1px solid #222;
+            position: relative;
+            z-index: 1;
         }
 
         footer p {
@@ -124,14 +187,19 @@
             text-decoration: none;
             border-bottom: 2px dashed #f87171;
             padding: 0 5px;
+            transition: all 0.2s ease;
         }
         
         footer a:hover {
             color: #fca5a5;
+            text-shadow: 0 0 10px rgba(248, 113, 113, 0.5);
         }
     </style>
 </head>
 <body>
+
+    <!-- The Floating Image -->
+    <img src="alex.png" alt="" class="floating-avatar">
 
     <header>
         <h1>Teta World cup By Alex Bouchrouche</h1>
@@ -169,10 +237,7 @@
 
             buttons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Update the iframe source
                     player.src = button.getAttribute('data-src');
-                    
-                    // Update the active button styling
                     buttons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                 });
