@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teta World Cup</title>
+    <style>
+        /* Reset and Base TV-Optimized Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            background-color: #050505; /* Deep black for TV contrast */
+            color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Prevents any scrolling on the TV */
+        }
+
+        /* Huge, Glowing Title */
+        header {
+            text-align: center;
+            padding: 1.5vh 0;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #111 0%, #050505 100%);
+        }
+
+        h1 {
+            font-size: 4.5vw; /* Scales perfectly to any TV size */
+            margin: 0;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ffd700, #ff8c00, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            letter-spacing: 2px;
+        }
+
+        /* Main Player Area */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 2vw;
+            min-height: 0; /* Crucial for flexbox to calculate heights correctly */
+        }
+
+        .player-container {
+            flex: 1;
+            width: 100%;
+            background: #000;
+            border-radius: 1vw;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.9);
+            margin-bottom: 1.5vh;
+            border: 2px solid #1f2937;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Large, Easy-to-Click Source Buttons */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.2vw;
+            padding: 1vh 0 2vh 0;
+            flex-shrink: 0;
+        }
+
+        button {
+            font-size: 1.6vw; /* Large text for reading from the couch */
+            padding: 1.5vh 3vw;
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: #2563eb;
+            border-color: #60a5fa;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+        }
+
+        button.active {
+            background: #1d4ed8;
+            border-color: #93c5fd;
+            box-shadow: 0 0 25px rgba(37, 99, 235, 0.6);
+        }
+
+        /* Backup Link Footer */
+        footer {
+            text-align: center;
+            padding: 1.2vh;
+            background: #111;
+            flex-shrink: 0;
+            border-top: 1px solid #222;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1.2vw;
+        }
+
+        footer a {
+            color: #f87171;
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 2px dashed #f87171;
+            padding: 0 5px;
+        }
+        
+        footer a:hover {
+            color: #fca5a5;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Teta World cup By Alex Bouchrouche</h1>
+    </header>
+
+    <main>
+        <div class="player-container">
+            <!-- Comprehensive 'allow' attributes to ensure all DRM and streaming features work -->
+            <iframe id="video-player" 
+                    src="https://embed.st/embed/admin/ppv-argentina-vs-egypt/1" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+        <nav class="controls">
+            <button class="source-btn active" data-src="https://embed.st/embed/admin/ppv-argentina-vs-egypt/1">TSN English</button>
+            <button class="source-btn" data-src="https://embed.st/embed/admin/ppv-argentina-vs-egypt/3">Fox</button>
+            <button class="source-btn" data-src="https://dami-tv.pro/embed/?id=wc%2F2026-07-07%2Farg-egy">beIN Sport</button>
+            <button class="source-btn" data-src="https://ntv.cx/embed?t=U3kvVGsxU1RSbFNVNzYraHQ0eDVFWktGeGVzQkNwSHdpdVRML1F2aWtWS09WdGRpWU9YS3RXcndiSXlDTFZjSWl1c210OUJIeDk5Ty92MEtvQ3JITnc9PQ~~">ITV</button>
+            <button class="source-btn" data-src="https://vileembeds.pages.dev/embed/worldcup-1">PPV</button>
+            <button class="source-btn" data-src="https://vileembeds.pages.dev/embed/telemund0-usa">Telemundo</button>
+        </nav>
+    </main>
+
+    <footer>
+        <p>If the website is down, use the <a href="https://strm01.vip/?m=30716&lang=ar" target="_blank">Emergency Backup Stream</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = document.getElementById('video-player');
+            const buttons = document.querySelectorAll('.source-btn');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update the iframe source
+                    player.src = button.getAttribute('data-src');
+                    
+                    // Update the active button styling
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
